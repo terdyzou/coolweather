@@ -1,5 +1,8 @@
 package com.coolweather.app.activity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.coolweather.app.R;
@@ -57,6 +61,23 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 * 用于显示当前日期
 	 */
 	private TextView currentDateText;
+
+	/**
+	 * 根据不同的天气切换对应的背景图
+	 */
+	private RelativeLayout weatherBackground;
+
+	private enum WeatherType {
+		cloudy, light_rain, overcase, sunny
+	};
+
+	private static Map<String, WeatherType> weatherType = new HashMap<String, WeatherType>();
+	static {
+		weatherType.put("多云", WeatherType.cloudy);
+		weatherType.put("小雨", WeatherType.light_rain);
+		weatherType.put("阴", WeatherType.overcase);
+		weatherType.put("晴", WeatherType.sunny);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -193,11 +214,41 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		cityNameText.setText(prefs.getString("city_name", ""));
 		temp1Text.setText(prefs.getString("temp1", ""));
 		temp2Text.setText(prefs.getString("temp2", ""));
-		weatherDespText.setText(prefs.getString("weather_desp", ""));
+		String weatherDesp = prefs.getString("weather_desp", "");
+		weatherDespText.setText(weatherDesp);
+		WeatherType weather = weatherType.get(weatherDesp);
+		showWeatherBackground(weather);
 		publishText.setText("今天" + prefs.getString("publish_time", "") + "发布");
 		currentDateText.setText(prefs.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);
+	}
+
+	/**
+	 * 根据不同的天气设置不同的背景图
+	 */
+	private void showWeatherBackground(WeatherType weatherType) {
+		if (weatherType == null) {
+			return;
+		}
+
+		weatherBackground = (RelativeLayout) findViewById(R.id.weather_background);
+		switch (weatherType) {
+		case cloudy:
+			weatherBackground.setBackgroundResource(R.drawable.cloudy);
+			break;
+		case light_rain:
+			weatherBackground.setBackgroundResource(R.drawable.light_rain);
+			break;
+		case overcase:
+			weatherBackground.setBackgroundResource(R.drawable.overcase);
+			break;
+		case sunny:
+			weatherBackground.setBackgroundResource(R.drawable.sunny);
+			break;
+		default:
+			break;
+		}
 	}
 
 }
