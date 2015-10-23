@@ -26,6 +26,8 @@
         </activity>
         <activity android:name="com.coolweather.app.activity.WeatherActivity" >
         </activity>
+        <activity android:name="com.coolweather.app.activity.UpdateSettingsActivity" >
+        </activity>
 
         <service android:name="com.coolweather.app.service.AutoUpdateService" >
         </service>

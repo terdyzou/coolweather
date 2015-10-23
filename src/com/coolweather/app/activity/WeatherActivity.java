@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coolweather.app.R;
-import com.coolweather.app.service.AutoUpdateService;
 import com.coolweather.app.util.HttpCallbackListener;
 import com.coolweather.app.util.HttpUtil;
 import com.coolweather.app.util.Utility;
@@ -30,6 +29,10 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 * 用于显示城市名
 	 */
 	private TextView cityNameText;
+	/**
+	 * 更新设置
+	 */
+	private Button updateSettings;
 	/**
 	 * 更新天气按钮
 	 */
@@ -65,6 +68,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 
 		switchCity = (Button) findViewById(R.id.switch_city);
 		cityNameText = (TextView) findViewById(R.id.city_name);
+		updateSettings = (Button) findViewById(R.id.update_settings);
 		refreshWeather = (Button) findViewById(R.id.refresh_weather);
 
 		publishText = (TextView) findViewById(R.id.publish_text);
@@ -74,6 +78,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		currentDateText = (TextView) findViewById(R.id.current_date);
 
 		switchCity.setOnClickListener(this);
+		updateSettings.setOnClickListener(this);
 		refreshWeather.setOnClickListener(this);
 
 		String countyCode = getIntent().getStringExtra("county_code");
@@ -96,6 +101,11 @@ public class WeatherActivity extends Activity implements OnClickListener {
 			Intent intent = new Intent(this, ChooseAreaActivity.class);
 			intent.putExtra("from_weather_activity", true);
 			startActivity(intent);
+			finish();
+			break;
+		case R.id.update_settings:
+			Intent intent2 = new Intent(this, UpdateSettingsActivity.class);
+			startActivity(intent2);
 			finish();
 			break;
 		case R.id.refresh_weather:
@@ -188,8 +198,6 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		currentDateText.setText(prefs.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);
-		Intent intent = new Intent(this, AutoUpdateService.class);
-		startService(intent);
 	}
 
 }

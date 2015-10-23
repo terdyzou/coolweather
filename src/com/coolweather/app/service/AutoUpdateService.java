@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.coolweather.app.receiver.AutoUpdateReceiver;
 import com.coolweather.app.util.HttpCallbackListener;
@@ -30,8 +31,9 @@ public class AutoUpdateService extends Service {
 				updateWeather();
 			}
 		});
+		int updateFrequency = intent.getIntExtra("update_frequency", 8);
 		AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		int hours = 8 * 60 * 60 * 1000; // 这是8小时的毫秒数
+		int hours = updateFrequency * 60 * 60 * 1000; // 这是N小时的毫秒数
 		long triggerAtTime = SystemClock.elapsedRealtime() + hours;
 		Intent i = new Intent(this, AutoUpdateReceiver.class);
 		PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
